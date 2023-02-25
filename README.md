@@ -1,3 +1,9 @@
+
+# setup to test
+you will need to pip install the dependencies os, fnmatch, etc..
+you will need to also copy a icloud zip file containing .HEIC files to the zip directory 
+these are the files that will be extracted then converted to HEIC
+
 # HEIC to PNG Converter
 
 This code extracts HEIC files from a zip file, converts them to PNG, and deletes the extracted files.
