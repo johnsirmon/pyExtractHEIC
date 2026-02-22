@@ -1,29 +1,98 @@
-
-# setup to test
-you will need to pip install the dependencies os, fnmatch, etc..
-you will need to also copy a icloud zip file containing .HEIC files to the zip directory 
-these are the files that will be extracted then converted to HEIC
-
 # HEIC to PNG Converter
 
-This code extracts HEIC files from a zip file, converts them to PNG, and deletes the extracted files.
+Extract HEIC photos from iCloud zip archives and convert them to PNG files.
 
-## Directories
+## Quick Start
 
-The following directories are set:
+### Prerequisites
 
-- Zip file directory: `zip`
-- Extracted file directory: `extract`
-- Converted file directory: `convert`
+- Python 3.10+
+- `pip`
 
-## Zip Files
+### Install dependencies
 
-The pattern for zip files is set as `*icloud*.zip`. The code loops through zip files, and if the zip file matches the pattern, it is opened. The code then loops through files in the zip file. If the file is not in the icloud photos folder, the icloud photos directory is removed from the file path. The file is then extracted to the extract directory.
+```bash
+pip install -r requirements.txt
+```
 
-## HEIC Files
+### Run (CLI)
 
-The code loops through extracted files. If the file is a HEIC file, it is opened and converted to a PNG. The PNG is saved in the convert directory.
+```bash
+python -m heic_converter \
+  --zip-dir   ./zip     \
+  --convert-dir ./convert
+```
 
-## Clean up
+Place iCloud zip files (matching `*icloud*.zip`) in the `./zip` directory, then run the
+command above.  Converted PNG files will appear in `./convert`.
 
-The extracted files are deleted, and the extract directory is deleted.
+Use `--help` for all options:
+
+```bash
+python -m heic_converter --help
+```
+
+### Run (legacy script)
+
+```bash
+python ConvertIphonePics.py
+```
+
+This expects `./zip`, `./extract`, and `./convert` directories relative to the script.
+
+---
+
+## How It Works
+
+1. Each zip file matching `*icloud*.zip` in `--zip-dir` is opened.
+2. Files inside the `iCloud Photos/` folder within the zip are extracted to a
+   temporary directory.
+3. Every `.heic` file is converted to `.png` and saved in `--convert-dir`.
+4. The temporary extract directory is removed.
+
+---
+
+## Development
+
+### Install dev dependencies
+
+```bash
+pip install -r requirements.txt
+pip install pytest ruff
+```
+
+### Lint
+
+```bash
+ruff check heic_converter/ tests/
+```
+
+### Test
+
+```bash
+pytest
+```
+
+### CI
+
+A GitHub Actions workflow (`.github/workflows/ci.yml`) runs lint and tests on
+every push and pull request.
+
+---
+
+## Project Structure
+
+```
+heic_converter/        # Main package
+  __init__.py
+  converter.py         # Core extraction & conversion logic
+  cli.py               # argparse CLI entry point
+tests/
+  test_converter.py    # Unit tests for converter module
+  test_cli.py          # Unit tests for CLI
+ConvertIphonePics.py   # Legacy entry-point (calls heic_converter)
+requirements.txt       # Runtime dependencies
+pyproject.toml         # Build & tool configuration
+.github/workflows/ci.yml
+```
+
