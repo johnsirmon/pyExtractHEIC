@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=70", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "heic-converter"
+version = "1.0.0"
+description = "Extract HEIC files from iCloud zip archives and convert them to PNG"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+dependencies = [
+    "Pillow>=10.0",
+    "pillow-heif>=0.13",
+]
+
+[project.scripts]
+heic-converter = "heic_converter.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["heic_converter*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP"]
+ignore = []
